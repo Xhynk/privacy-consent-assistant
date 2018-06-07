@@ -2,7 +2,7 @@
 	/**
 		* Plugin Name: Privacy & Consent Assistant
 		* Description: This plugin provides an interface to assist with consent and privacy compliance. It is not guaranteed to satisfy all clauses in the GDPR or any other legal requirements.
-		* Version:	   1.0.6
+		* Version:	   1.0.7
 		* Author:	   Third River Marketing
 		* Text Domain: trm-gdpr
 		* License:	   GPL-3.0+
@@ -526,10 +526,10 @@
 			if( $company_name = get_option( 'trm_gdpr_company_name') ){
 				// Overwritten Name, Nice
 				$content = str_replace( '[Company Name]', $company_name, $content );
-			} else if( $company_name = genesis_get_option( 'organization', 'child-settings' ) ){
+			} else if( function_exists('genesis_get_option') && $company_name = genesis_get_option( 'organization', 'child-settings' ) ){
 				// Review Engine Name
 				$content = str_replace( '[Company Name]', $company_name, $content );
-			} else if( $company_name = genesis_get_option( 'lmp_gen_company_name', 'website-genesis-options' ) ){
+			} else if( function_exists('genesis_get_option') && $company_name = genesis_get_option( 'lmp_gen_company_name', 'website-genesis-options' ) ){
 				// TRD Name
 				$content = str_replace( '[Company Name]', $company_name, $content );
 			} else if( $company_name = get_bloginfo( 'name' ) ){
@@ -544,11 +544,11 @@
 			if( $company_address = get_option( 'trm_gdpr_company_address') ){
 				// Overwritten, Nice
 				$content = str_replace( '[Company Address]', $company_address, $content );
-			} else if( genesis_get_option( 'address', 'child-settings' ) || genesis_get_option( 'state', 'child-settings' ) ){
+			} else if( function_exists('genesis_get_option') && genesis_get_option( 'address', 'child-settings' ) || genesis_get_option( 'state', 'child-settings' ) ){
 				// Review Engine Address
 				$company_address = genesis_get_option( 'address', 'child-settings' ).' '.genesis_get_option( 'city', 'child-settings' ).' '.genesis_get_option( 'state', 'child-settings' ).' '.genesis_get_option( 'zip_code', 'child-settings' );
 				$content = str_replace( '[Company Address]', $company_address, $content );
-			} else if( genesis_get_option( 'lmp_gen_street_address', 'website-genesis-options' ) || genesis_get_option( 'lmp_gen_state', 'website-genesis-options' ) ){
+			} else if( function_exists('genesis_get_option') && genesis_get_option( 'lmp_gen_street_address', 'website-genesis-options' ) || genesis_get_option( 'lmp_gen_state', 'website-genesis-options' ) ){
 				// TRD Address
 				$company_address = genesis_get_option( 'lmp_gen_street_address', 'website-genesis-options' ).' '.genesis_get_option( 'lmp_gen_street_address_two', 'website-genesis-options' ).' '.genesis_get_option( 'lmp_gen_city', 'website-genesis-options' ).' '.genesis_get_option( 'lmp_gen_state', 'website-genesis-options' ).' '.genesis_get_option( 'lmp_gen_po_box', 'website-genesis-options' ).' '.genesis_get_option( 'lmp_gen_country', 'website-genesis-options' );
 				$content = str_replace( '[Company Address]', $company_address, $content );
@@ -560,10 +560,10 @@
 			if( $company_phone = get_option( 'trm_gdpr_company_phone' ) ){
 				// Overwritten, Nice
 				$content = str_replace( '[Company Phone]', $company_phone, $content );
-			} else if( $company_phone = genesis_get_option( 'phone', 'child-settings' ) ){
+			} else if( function_exists('genesis_get_option') && $company_phone = genesis_get_option( 'phone', 'child-settings' ) ){
 				// Review Engine Phone
 				$content = str_replace( '[Company Phone]', $company_phone, $content );
-			} else if( $company_phone = genesis_get_option( 'lmp_gen_phone', 'website-genesis-options' ) ){
+			} else if( function_exists('genesis_get_option') && $company_phone = genesis_get_option( 'lmp_gen_phone', 'website-genesis-options' ) ){
 				// TRD Phone
 				$content = str_replace( '[Company Phone]', $company_phone, $content );
 			} else {
@@ -574,7 +574,7 @@
 			if( $company_email = get_option( 'trm_gdpr_company_email' ) ){
 				// Overwritten, Nice
 				$content = str_replace( '[Company Email]', $company_email, $content );
-			} else if( $company_email = genesis_get_option( 'author_email', 'child-settings' ) ){
+			} else if( function_exists('genesis_get_option') && $company_email = genesis_get_option( 'author_email', 'child-settings' ) ){
 				// Review Engine Email
 				$content = str_replace( '[Company Email]', $company_email, $content );
 			} else if( $company_email = get_bloginfo( 'admin_email' ) ){

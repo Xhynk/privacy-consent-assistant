@@ -3,7 +3,7 @@ Contributors: Third River Marketing, Alex Demchak
 Tags: Third River Marketing
 Requires at least: 3.5.1
 Tested up to: 4.9.5
-Stable tag: 1.0.6
+Stable tag: 1.0.7
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
 An easy-to-use interface to aide with Consent and Privacy compliance.
@@ -19,6 +19,9 @@ This plugin provides an interface to assist with consent and privacy compliance.
 3. It's recommended to insert the Company information in the Privacy & Consent admin panel.
 
 == Changelog ==
+= 1.0.7 =
+* Prevented Genesis Specific errors
+
 = 1.0.6 =
 * Replaced Dynamic CSS file with Dynamic CSS option.
 * Forced Positioning and colors on Consent Messages to better accommodate all themes.
