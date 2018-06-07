@@ -86,8 +86,9 @@
 }
 
 .trm-gdpr-ui .consent-bar a {
-	text-decoration: underline;
-	color: #fff;
+	text-decoration: underline !important;
+	font-family: 'helvetica', 'arial', sans-serif !important;
+	color: #fff !important;
 }
 
 /* Form Consent */
