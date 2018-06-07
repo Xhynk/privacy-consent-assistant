@@ -33,11 +33,12 @@
 }
 
 /* Consent Bar */
-.trm-gdpr-ui .consent-bar {
+#trm-gdpr-consent-bar {
 	z-index: 1000;
 	z-index: 16777270;
 	position: fixed;
 	bottom: 0;
+	left: 0;
 	background: #282C34;
 	width: 100%;
 	padding: 20px 0;
@@ -93,7 +94,7 @@
 .trm-gdpr-ui.trm-gdpr-form-consent-wrap {
 	display: inline-block !important;
 	clear: both !important;
-	margin: 12px auto !important;
+	margin: 12px auto;
 	width: 100% !important;
 }
 
@@ -146,6 +147,10 @@
 	transform-origin: left;
 	transform: scale(1.2);
 	cursor: pointer;
+}
+
+.trm-gdpr-ui.trm-gdpr-form-consent-wrap .consent-notice-form p {
+	color: #333 !important;
 }
 
 .trm-gdpr-ui.trm-gdpr-form-consent-wrap .consent-notice-form a {

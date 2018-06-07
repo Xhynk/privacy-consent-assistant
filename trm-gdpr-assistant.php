@@ -2,7 +2,7 @@
 	/**
 		* Plugin Name: Privacy & Consent Assistant
 		* Description: This plugin provides an interface to assist with consent and privacy compliance. It is not guaranteed to satisfy all clauses in the GDPR or any other legal requirements.
-		* Version:	   1.0.5
+		* Version:	   1.0.6
 		* Author:	   Third River Marketing
 		* Text Domain: trm-gdpr
 		* License:	   GPL-3.0+
@@ -39,6 +39,29 @@
 
 		public static $policies = ['Privacy Policy', 'Terms of Service', 'Cookie Policy'];
 		public static $notices  = ['Form Consent', 'Consent Bar'];
+
+		public static $option_fields = [
+			'trm_gdpr_company_name'                   => 'string',
+			'trm_gdpr_company_phone'                  => 'string',
+			'trm_gdpr_company_email'                  => 'string',
+			'trm_gdpr_company_address'                => 'string',
+			'trm_gdpr_governing_state'                => 'string',
+			'trm_gdpr_governing_country'              => 'string',
+			'trm_gdpr_overwrite_privacy_policy'       => 'string',
+			'trm_gdpr_overwrite_terms_of_service'     => 'string',
+			'trm_gdpr_overwrite_cookie_policy'        => 'string',
+			'trm_gdpr_custom_privacy_policy'          => 'string',
+			'trm_gdpr_custom_terms_of_service'        => 'string',
+			'trm_gdpr_custom_cookie_policy'           => 'string',
+			'trm_gdpr_disable_form_consent'           => 'boolean',
+			'trm_gdpr_disable_consent_bar'            => 'boolean',
+			'trm_gdpr_disable_subfooter'              => 'boolean',
+			'trm_gdpr_disable_hide_existing_links'    => 'boolean',
+			'trm_gdpr_overwrite_notice_form_consent'  => 'textarea',
+			'trm_gdpr_overwrite_notice_consent_bar'   => 'textarea',
+			'trm_gdpr_close_consent_functions'        => 'textarea',
+			'trm_gdpr_dynamic_style'                  => 'textarea_complex'
+		];
 
 		public function icon( $icon = '' ){
 				 if( $icon == 'edit' )   return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.66V20a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h5.34"></path><polygon points="18 2 22 6 12 16 8 16 8 12 18 2"></polygon></svg>';
@@ -77,20 +100,21 @@
 			$this->init();
 			add_action( 'wpmu_new_blog',		 [$this, 'new_blog_init'], 10, 6 );
 
-			add_action( 'init',				  [$this, 'policy_post_type'] );
-			add_action( 'init',				  [$this, 'register_shortcodes'] );
-			add_action( 'wp_enqueue_scripts',	[$this, 'wp_enqueue'] );
+			add_action( 'init',                  [$this, 'convert_dynamic_style'] );
+			add_action( 'init',				     [$this, 'policy_post_type'] );
+			add_action( 'init',				     [$this, 'register_shortcodes'] );
+			add_action( 'wp_enqueue_scripts',	 [$this, 'wp_enqueue'] );
 			add_action( 'admin_enqueue_scripts', [$this, 'admin_enqueue'] );
-			add_action( 'single_template',	   [$this, 'policy_template'], 99 );
+			add_action( 'single_template',	     [$this, 'policy_template'], 99 );
 			add_action( 'template_redirect',	 [$this, 'insert_form_consent'] );
 			add_action( 'template_redirect',	 [$this, 'dynamic_consent_delete'] );
 			add_action( 'wp_footer',			 [$this, 'display_versions'] );
 			add_action( 'wp_footer',			 [$this, 'display_consent_bar'] );
 			add_action( 'wp_footer',			 [$this, 'display_subfooter'] );
-			add_action( 'admin_menu',			[$this, 'register_admin_page'] );
+			add_action( 'admin_menu',			 [$this, 'register_admin_page'] );
 
-			add_filter( 'the_content',		   [$this, 'filter_policy_content'] );
-			add_filter( 'body_class',			[$this, 'add_gdpr_body_class'] );
+			add_filter( 'the_content',		     [$this, 'filter_policy_content'] );
+			add_filter( 'body_class',			 [$this, 'add_gdpr_body_class'] );
 
 			// Some themes seems to be loading scripts before wp_footer output.
 			add_filter( 'script_loader_tag', function($tag, $handle){
@@ -133,12 +157,21 @@
 			}
 		}
 
-		public function init_gdpr_assistant(){
-			// Create Dynamic CSS File if Doesn't Exist
-			if( !($dynamic_style = fopen( plugin_dir_path( __FILE__ ) .'css/dynamic.css', 'a') ) ){
-				fwrite( $dynamic_style, "/* TRM GDPR Dynamic Styles */\r\n" );
-				fclose( $dynamic_style );
+		public function convert_dynamic_style(){
+			if( !( $dynamic_style = get_option( 'trm_gdpr_dynamic_style' ) ) ){
+				// No Option Exists; Either Old Method or New Install
+				if( $dynamic_file = @file_get_contents( plugin_dir_path( __FILE__ ) . 'css/dynamic.css' ) ){
+					// Old Method, Convert to Option
+					update_option( 'trm_gdpr_dynamic_style', $dynamic_file );
+				} else {
+					// New Install, Set a Basic Option
+					update_option( 'trm_gdpr_dynamic_style', "/* TRM GDPR Dynamic Styles */\r\n" );
+				}
 			}
+		}
+
+		public function init_gdpr_assistant(){
+			$this->convert_dynamic_style();
 
 			// Get Inserted Policy Page IDs
 			foreach( $this::$policies as $policy ){
@@ -261,7 +294,7 @@
 
 		public function wp_enqueue(){
 			wp_enqueue_style( 'trm-gdpr', plugins_url( '/css/core.min.css', __FILE__ ), [], filemtime( plugin_dir_path( __FILE__ ) . 'css/core.min.css' ) );
-			echo '<style>'. file_get_contents( plugin_dir_path( __FILE__ ) . 'css/dynamic.css' ) .'</style>';
+			echo '<style>'. get_option( 'trm_gdpr_dynamic_style' ) .'</style>';
 			
 			if( get_option( 'trm_gdpr_disable_hide_existing_links' ) != true )
 				echo '<style>.trm-gdpr-active .creds a[href*="/terms"],.trm-gdpr-active .creds a[href*="/privacy"]{display:none}</style>';
@@ -371,21 +404,20 @@
 
 					if( $response['status'] == 200 ){
 						// Nothing has gone wrong yet
-						$dynamic_style = fopen( plugin_dir_path( __FILE__ ) .'css/dynamic.css', 'a');
+						$dynamic_style = get_option( 'trm_gdpr_dynamic_style' );
 						$comment_log   = '['. get_current_user_id() .'] '. get_the_title( intval( $_GET['dynamic-page'] ) ) .", Form #". ++$_GET['dynamic-index'].'';
+						$added_style   = "/* $comment_log */ $element{display:none!important;height:0;width:0;overflow:hidden;position:absolute}\r\n";
 
-						if( fwrite( $dynamic_style, "/* $comment_log */ $element{display:none!important;height:0;width:0;overflow:hidden;position:absolute}\r\n" ) ){
+						if( update_option( 'trm_gdpr_dynamic_style', $dynamic_style.$added_style ) ){
 							$response['status']  = 200;
 							$response['message'] = 'Consent Notice Hidden';
 						} else {
 							$response['status']  = 400;
 							$response['message'] = 'Consent Notice Could Not Be Hidden, unknown error';
 						}
-
-						fclose( $dynamic_style );
 					} else {
 						if( $response['status'] != 400 ){
-							$response['status'] = 400;
+							$response['status']  = 400;
 							$response['message'] = 'Unkown Error.';
 						}
 					}
@@ -587,6 +619,8 @@
 				}
 
 				return wp_kses( $input, $args );
+			} else if( $type == 'textarea_complex' ){
+				return sanitize_textarea_field( $input ).PHP_EOL;
 			}
 		}
 	}

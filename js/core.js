@@ -96,7 +96,7 @@ function closeTRMGDPRconsent(){
 	deleteCookie( cookie.name );
 	setCookie( cookie.name, urldecode( cookie.value ) );
 	
-	consentBar.remove();
+	if( consentBar != null ) consentBar.remove();
 }
 
 // Auto-remove Consent Bar If Cookie
@@ -107,7 +107,7 @@ function closeTRMGDPRconsent(){
 	if( consentCookie != null ){
 		let expectedValue = '{"close":true,"versions":"'+ versions +'","revised":"'+ revised +'"}';
 		if( consentCookie == expectedValue ){
-			consentBar.remove();
+			if( consentBar != null ) consentBar.remove();
 		}
 	}
 })();

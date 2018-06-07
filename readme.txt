@@ -1,9 +1,9 @@
 === Privacy & Consent Assistant ===
 Contributors: Third River Marketing, Alex Demchak
-Tags: GDPR, Consent, Cookies, Privacy, Privacy Policy
+Tags: Third River Marketing
 Requires at least: 3.5.1
 Tested up to: 4.9.5
-Stable tag: 1.0.5
+Stable tag: 1.0.6
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
 An easy-to-use interface to aide with Consent and Privacy compliance.
@@ -19,6 +19,10 @@ This plugin provides an interface to assist with consent and privacy compliance.
 3. It's recommended to insert the Company information in the Privacy & Consent admin panel.
 
 == Changelog ==
+= 1.0.6 =
+* Replaced Dynamic CSS file with Dynamic CSS option.
+* Forced Positioning and colors on Consent Messages to better accommodate all themes.
+
 = 1.0.5 =
 * Better sanitization/validation methods when saving options
 * Fixed minor JS errors on non-post editor pages. 

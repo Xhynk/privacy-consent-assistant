@@ -9,46 +9,12 @@
 	if( isset( $_POST['_update_trm_gdpr'] ) ){
 		if( $_POST['_update_trm_gdpr'] == true ){
 			if( wp_verify_nonce( $_POST['_wpnonce'], 'update-trm-gdpr-options' ) ){
-				$trm_gdpr_fields = [
-					'trm_gdpr_company_name'                   => 'string',
-					'trm_gdpr_company_address'                => 'string',
-					'trm_gdpr_governing_state'                => 'string',
-					'trm_gdpr_governing_country'              => 'string',
-					'trm_gdpr_company_phone'                  => 'string',
-					'trm_gdpr_company_email'                  => 'string',
-					'trm_gdpr_overwrite_privacy_policy'       => 'string',
-					'trm_gdpr_overwrite_terms_of_service'     => 'string',
-					'trm_gdpr_overwrite_cookie_policy'        => 'string',
-					'trm_gdpr_custom_privacy_policy'          => 'string',
-					'trm_gdpr_custom_terms_of_service'        => 'string',
-					'trm_gdpr_custom_cookie_policy'           => 'string',
-					'trm_gdpr_disable_form_consent'           => 'boolean',
-					'trm_gdpr_disable_consent_bar'            => 'boolean',
-					'trm_gdpr_disable_subfooter'              => 'boolean',
-					'trm_gdpr_disable_hide_existing_links'    => 'boolean',
-					'trm_gdpr_overwrite_notice_form_consent'  => 'textarea',
-					'trm_gdpr_overwrite_notice_consent_bar'   => 'textarea',
-					'trm_gdpr_close_consent_functions'        => 'textarea',
-				];
-
-				foreach( $trm_gdpr_fields as $field => $type ){
+				foreach( $this::$option_fields as $field => $type ){
 					if( !empty( $_POST[$field] ) ){
 						update_option( $field, $this->validate_option( $_POST[$field], $type ) );
 					} else {
 						update_option( $field, '' );
 					}
-				}
-
-				// Dynamic CSS
-				if( !empty( $_POST['trm_gdpr_dynamic_css'] ) ){ // There's CSS Rules Here
-					$new_style = sanitize_textarea_field( $_POST['trm_gdpr_dynamic_css'] );
-					if( $dynamic_style = fopen( plugin_dir_path( __FILE__ ) .'css/dynamic.css', 'w') ){ // File Exists
-						if( $new_style != $dynamic_style ){ // Changes have been made
-							$new_style = trim( $new_style ).PHP_EOL;
-							fwrite( $dynamic_style, stripslashes( $new_style ) );
-						}
-					}
-					fclose( $dynamic_style );
 				}
 			}
 		}
@@ -176,7 +142,7 @@
 			</div>
 			<div class="postbox">
 				<h2 class="hndle"><span>Removed Form Notices (One Per Line)</span></h2>
-				<pre><textarea name="trm_gdpr_dynamic_css" class="widefat wp-core-ui" rows="5"><?= stripslashes( file_get_contents( plugin_dir_path(__FILE__) .'css/dynamic.css' ) ); ?></textarea></pre>
+				<pre><textarea name="trm_gdpr_dynamic_style" class="widefat wp-core-ui" rows="5"><?= stripslashes( get_option( 'trm_gdpr_dynamic_style' ) ); ?></textarea></pre>
 			</div>
 			<input type="hidden" name="_update_trm_gdpr" value="true" />
 			<div style="text-align: right;"><input class="wp-core-ui button-primary" value="Save Options" name="submit" type="submit" /></div>
