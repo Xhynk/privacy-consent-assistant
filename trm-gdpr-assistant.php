@@ -2,7 +2,7 @@
 	/**
 		* Plugin Name: Privacy & Consent Assistant
 		* Description: This plugin provides an interface to assist with consent and privacy compliance. It is not guaranteed to satisfy all clauses in the GDPR or any other legal requirements.
-		* Version:	   1.0.7
+		* Version:	   1.0.7.1
 		* Author:	   Third River Marketing
 		* Text Domain: trm-gdpr
 		* License:	   GPL-3.0+

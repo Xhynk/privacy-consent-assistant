@@ -3,7 +3,7 @@ Contributors: Third River Marketing, Alex Demchak
 Tags: Third River Marketing
 Requires at least: 3.5.1
 Tested up to: 4.9.5
-Stable tag: 1.0.7
+Stable tag: 1.0.7.1
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
 An easy-to-use interface to aide with Consent and Privacy compliance.
