@@ -64,15 +64,11 @@ function deleteCookie(name){
 }
 
 function setCookie(name, value, path = '/', expiration = null){
-	if( expiration == null ){
-		//Default to 1 Year
-		let CookieDate = new Date();
-		CookieDate.setFullYear(CookieDate.getFullYear( ) + 1);
+	//Default to 1 Year
+	let CookieDate = new Date();
+	CookieDate.setFullYear(CookieDate.getFullYear( ) + 1);
 
-		let expires = ' expires=' + CookieDate.toGMTString( ) + ';';
-	} else {
-		let expires = ' expires=' + expiration + ';';
-	}
+	let expires = ' expires=' + CookieDate.toGMTString( ) + ';';
 
 	document.cookie = name + '=' + value + '; path=' + path + ';' + expires;
 }
