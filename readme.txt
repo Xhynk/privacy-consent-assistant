@@ -1,5 +1,5 @@
 === Privacy & Consent Assistant ===
-Contributors: Third River Marketing, Alex Demchak
+Contributors: Third River Marketing, alexdemchak
 Tags: Third River Marketing
 Requires at least: 3.5.1
 Tested up to: 4.9.5
