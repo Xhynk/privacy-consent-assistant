@@ -2,7 +2,7 @@
 	/**
 		* Plugin Name: Privacy & Consent Assistant
 		* Description: This plugin provides an interface to assist with consent and privacy compliance. It is not guaranteed to satisfy all clauses in the GDPR or any other legal requirements.
-		* Version:	   1.0.7.3
+		* Version:	   1.0.7.4
 		* Author:	   Third River Marketing
 		* Text Domain: trm-gdpr
 		* License:	   GPL-3.0+
@@ -35,7 +35,7 @@
 
 		// Commas break cookies in iOS/Safari. Use Hyphens instead
 		public static $versions = '1.1-1.1-1.0'; // Privacy, Terms, Cookie
-		public static $revised  = 'May 25th 2018-June 3rd 2016-May 25th 2018'; // Privacy, Terms, Cookie
+		public static $revised  = 'May_25th_2018-June_3rd_2016-May_25th_2018'; // Privacy, Terms, Cookie
 
 		public static $policies = ['Privacy Policy', 'Terms of Service', 'Cookie Policy'];
 		public static $notices  = ['Form Consent', 'Consent Bar'];
@@ -498,7 +498,7 @@
 			$content  = str_replace( '{PRIVACY_VERSION}', $versions[0], $content );
 
 			// Revisions
-			$revisions = explode( '-', $this::$revised );
+			$revisions = explode( '-', str_replace( '_', ' ', $this::$revised ) );
 			$content   = str_replace( '{TERMS_REVISED}',   $revisions[1], $content );
 			$content   = str_replace( '{COOKIE_REVISED}',  $revisions[2], $content );
 			$content   = str_replace( '{PRIVACY_REVISED}', $revisions[0], $content );
