@@ -2,7 +2,7 @@
 	/**
 		* Plugin Name: Privacy & Consent Assistant
 		* Description: This plugin provides an interface to assist with consent and privacy compliance. It is not guaranteed to satisfy all clauses in the GDPR or any other legal requirements.
-		* Version:	   1.0.7.4
+		* Version:	   1.0.8
 		* Author:	   Third River Marketing
 		* Text Domain: trm-gdpr
 		* License:	   GPL-3.0+
@@ -109,7 +109,7 @@
 			add_action( 'template_redirect',	 [$this, 'insert_form_consent'] );
 			add_action( 'template_redirect',	 [$this, 'dynamic_consent_delete'] );
 			add_action( 'wp_footer',			 [$this, 'display_versions'] );
-			add_action( 'wp_footer',			 [$this, 'display_consent_bar'] );
+			add_action( 'wp_footer',			 [$this, 'render_consent_bar'] );
 			add_action( 'wp_footer',			 [$this, 'display_subfooter'] );
 			add_action( 'admin_menu',			 [$this, 'register_admin_page'] );
 
@@ -438,35 +438,21 @@
 			echo "<div id='trm-gdpr-versions' data-versions='{$this::$versions}' data-revised='{$this::$revised}'></div>";
 		}
 
-		public function display_consent_bar(){
+		/**
+		 * As of version 1.0.8 we need to always to render the consent
+		 * bar, and deal with it showing/hiding on the front end with
+		 * JS or CSS. Our MWP server caches ANY consent click for ALL
+		 * users, instead of locally. So rely on JS cookie only.
+		 */
+		public function render_consent_bar(){
 			if( get_option( 'trm_gdpr_disable_consent_bar' ) != true ){
-				$show_consent = true;
+				$close_consent_functions = get_option( 'trm_gdpr_close_consent_functions' ) ? stripslashes( get_option( 'trm_gdpr_close_consent_functions' ) ) : '';
 
-				if( isset( $_COOKIE['trm-gdpr-consent'] ) ){
-					// They've Consented, Check Versions and Revisions
-					$consented_to = json_decode( stripslashes( urldecode( $_COOKIE['trm-gdpr-consent'] ) ) );
-
-					if( $consented_to->close == true ){
-						// Closed the Consent Bar
-						if( $consented_to->versions == $this::$versions ){
-							// Consented to Current Versions
-							if( $consented_to->revised == $this::$revised ){
-								// Consented to Current Revisions, Don't show Consent Bar
-								$show_consent = false;
-							}
-						}
-					}
-				}
-
-				if( $show_consent == true ){
-					$close_consent_functions = get_option( 'trm_gdpr_close_consent_functions' ) ? stripslashes( get_option( 'trm_gdpr_close_consent_functions' ) ) : '';
-
-					echo $this->wrap_element(
-						'<p><i class="cookie">'. $this->icon( 'cookie' ) .'</i>'. stripslashes( $this->consent_notices()->consent_bar ) .'</p><i onclick="closeTRMGDPRconsent(this); '. $close_consent_functions .' return false;" class="close-consent">'. $this->icon( 'close' ) .'</i>',
-						'trm-gdpr-consent-bar',
-						'consent-bar'
-					);
-				}
+				echo $this->wrap_element(
+					'<p><i class="cookie">'. $this->icon( 'cookie' ) .'</i>'. stripslashes( $this->consent_notices()->consent_bar ) .'</p><i onclick="closeTRMGDPRconsent(this); '. $close_consent_functions .' return false;" class="close-consent">'. $this->icon( 'close' ) .'</i>',
+					'trm-gdpr-consent-bar',
+					'consent-bar'
+				);
 			}
 		}
 
