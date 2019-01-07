@@ -2,8 +2,8 @@
 Contributors: Third River Marketing, alexdemchak
 Tags: Third River Marketing
 Requires at least: 3.5.1
-Tested up to: 4.9.5
-Stable tag: 1.0.8.2
+Tested up to: 5.0.2
+Stable tag: 1.0.8.3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
 An easy-to-use interface to aide with Consent and Privacy compliance.
@@ -19,6 +19,9 @@ This plugin provides an interface to assist with consent and privacy compliance.
 3. It's recommended to insert the Company information in the Privacy & Consent admin panel.
 
 == Changelog ==
+= 1.0.8.3 =
+* Updated JS to prevent erroneous console errors while still removing notices
+
 = 1.0.8 = 
 * JavaScript is now compiled with Babel for compatibilty
 * Removed PHP functionality for Consent Bar removal, as it conflicted with caching mechanisms on the server

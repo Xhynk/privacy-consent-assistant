@@ -97,32 +97,32 @@ function display_consent_bar(){
 })();
 
 // Dynamically Remove Unwanted Form Consents Notices
-let dynamicDelete = document.querySelectorAll('.dynamic-delete');
+var dynamicDelete = document.querySelectorAll('.dynamic-delete');
 if( dynamicDelete != null ){
 	for( var i = 0, n = dynamicDelete.length; i < n; ++i ){
 		dynamicDelete[i].onclick = function(){
 			if( confirm( 'Click "OK" to remove this notice.' ) ){
 				this.classList.add('deleting');
 
-				let parent = findAncestor(this, 'trm-gdpr-ui'),
+				var parent = findAncestor(this, 'trm-gdpr-ui'),
 					formID = findAncestor(this, 'FORM').getAttribute('id'),
 					url	   = parent.getAttribute('site-url'),
 					page   = parent.getAttribute('dynamic-delete-page'),
 					nonce  = parent.getAttribute('nonce'),
 					index  = parent.getAttribute('dynamic-delete-index');
 
-				let xhrURL = url + '?trm_gdpr_method=dynamic-delete&dynamic-page='+page+'&dynamic-index='+index+'&nonce='+nonce;
+				var xhrURL = url + '?trm_gdpr_method=dynamic-delete&dynamic-page='+page+'&dynamic-index='+index+'&nonce='+nonce;
 
 				if( formID != null )
 					xhrURL = xhrURL + '&form_id=' + formID;
 
-				let xhr = createCORSRequest('GET', xhrURL);
+				var xhr = createCORSRequest('GET', xhrURL);
 
 				if( !xhr ){
 					throw new Error('CORS not supported');
 				} else {
-					xhr.onload = (function() {
-						json = JSON.parse( xhr.response );
+					xhr.onload = (function( response ) {
+						var json = JSON.parse( response.currentTarget.response );
 						this.classList.remove('deleting');
 
 						if( json.status == 200 ){
